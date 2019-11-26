@@ -5,7 +5,7 @@ const $newNoteBtn = $(".new-note");
 const $noteList = $(".list-container .list-group");
 console.log("helloworld this is static indexjs");
 // activeNote is used to keep track of the note in the textarea
-const activeNote = {};
+let activeNote = {};
 let lastID = -1;
 
 // A function for getting all notes from the db
@@ -35,7 +35,7 @@ const deleteNote = id => {
 
 // If there is an activeNote, display it, otherwise render empty inputs
 const renderActiveNote = () => {
-  $saveNoteBtn.hide();
+  // $saveNoteBtn.hide();
 
   if (activeNote.id) {
     $noteTitle.attr("readonly", true);
@@ -52,18 +52,13 @@ const renderActiveNote = () => {
 
 // Get the note data from the inputs, save it to the db and update the view
 const handleNoteSave = () => {
-  lastID = lastID + 1;
-  const newNote = {
+  
+  let newNote = {
     title: $noteTitle.val(),
     text: $noteText.val(),
-    id: lastID
   };
 
-  // $.post("/api/note", newNote).then(function(data) {
-  //   console.log("add.html", data);
-  //   alert("Adding character...");
-  // });
-  saveNote(newNote).then(dat => {
+  saveNote(newNote).then(data => {
     getAndRenderNotes();
     renderActiveNote();
   });
@@ -89,8 +84,10 @@ const handleNoteDelete = event => {
 };
 
 // Sets the activeNote and displays it
-const handleNoteView = () => {
+var handleNoteView = function() {
   activeNote = $(this).data();
+  console.log("this", this);
+
   renderActiveNote();
 };
 
@@ -104,9 +101,9 @@ const handleNewNoteView = () => {
 // Or else show it
 const handleRenderSaveBtn = () => {
   if (!$noteTitle.val().trim() || !$noteText.val().trim()) {
-    $saveNoteBtn.hide();
+    // $saveNoteBtn.hide();
   } else {
-    $saveNoteBtn.show();
+    // $saveNoteBtn.show();
   }
 };
 
@@ -135,6 +132,8 @@ const renderNoteList = notes => {
 // Gets notes from the db and renders them to the sidebar
 const getAndRenderNotes = () => {
   return getNotes().then(data => {
+    console.log("getnotes", data);
+
     renderNoteList(data);
   });
 };
