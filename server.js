@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 const PORT = process.env.PORT || 3000;
 const path = require("path");
-
+let noteID = 1;
 const notes = [];
 
 //sets up the experss app to handle data parsing
@@ -26,6 +26,7 @@ app.get("/api/notes", (req, res) => {
 });
 
 app.post("/api/notes", (req, res) => {
+  req.body.id = noteID ++;
   notes.push(req.body);
   res.json(true);
   console.log(req.body);
