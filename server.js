@@ -5,7 +5,7 @@ const path = require("path");
 let noteID = 1;
 const notes = [];
 
-//sets up the experss app to handle data parsing
+//sets up the express app to handle data parsing
 app.use(express.static("public"));
 app.use(express.static("assets"));
 app.use(express.static("css"));
