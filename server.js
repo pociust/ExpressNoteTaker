@@ -3,16 +3,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const path = require("path");
 
-const notes = [
-  {
-    title: "first note",
-    text: "typing my first note"
-  },
-  {
-    title: "get groceries",
-    text: "get eggs, milk, cheese"
-  }
-];
+const notes = [];
 
 //sets up the experss app to handle data parsing
 app.use(express.static("public"));
