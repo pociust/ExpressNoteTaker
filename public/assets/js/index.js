@@ -35,7 +35,7 @@ const deleteNote = id => {
 
 // If there is an activeNote, display it, otherwise render empty inputs
 const renderActiveNote = () => {
-  // $saveNoteBtn.hide();
+  $saveNoteBtn.hide();
 
   if (activeNote.id) {
     $noteTitle.attr("readonly", true);
@@ -52,15 +52,13 @@ const renderActiveNote = () => {
 
 // Get the note data from the inputs, save it to the db and update the view
 const handleNoteSave = () => {
-  
   let newNote = {
     title: $noteTitle.val(),
-    text: $noteText.val(),
+    text: $noteText.val()
   };
-
-  saveNote(newNote).then(data => {
-    getAndRenderNotes();
-    renderActiveNote();
+  saveNote(newNote).then(function(data) {
+    getAndRenderNotes(data);
+    renderActiveNote(data);
   });
 };
 
@@ -101,20 +99,22 @@ const handleNewNoteView = () => {
 // Or else show it
 const handleRenderSaveBtn = () => {
   if (!$noteTitle.val().trim() || !$noteText.val().trim()) {
-    // $saveNoteBtn.hide();
+    $saveNoteBtn.hide();
   } else {
-    // $saveNoteBtn.show();
+    $saveNoteBtn.show();
   }
 };
 
 // Render's the list of note titles
 const renderNoteList = notes => {
   $noteList.empty();
+  console.log("renderNoteList", notes);
 
   const noteListItems = [];
 
   for (var i = 0; i < notes.length; i++) {
     let note = notes[i];
+    console.log("notes", note[0]);
 
     let $li = $("<li class='list-group-item'>").data(note);
     let $span = $("<span>").text(note.title);
@@ -132,8 +132,6 @@ const renderNoteList = notes => {
 // Gets notes from the db and renders them to the sidebar
 const getAndRenderNotes = () => {
   return getNotes().then(data => {
-    console.log("getnotes", data);
-
     renderNoteList(data);
   });
 };
@@ -146,4 +144,5 @@ $noteTitle.on("keydown", handleRenderSaveBtn);
 $noteText.on("keydown", handleRenderSaveBtn);
 
 // Gets and renders the initial list of notes
+getNotes();
 getAndRenderNotes();

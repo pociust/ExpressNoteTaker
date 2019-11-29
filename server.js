@@ -2,6 +2,8 @@ const express = require("express");
 const app = express();
 const PORT = process.env.PORT || 3000;
 const path = require("path");
+const fs = require("fs");
+
 let noteID = 1;
 const notes = [];
 
@@ -22,14 +24,26 @@ app.get("/notes", function(req, res) {
 });
 
 app.get("/api/notes", (req, res) => {
-  return res.json(notes);
+  fs.readFile("./db/db.json", (err, data) => {
+    if (err) throw err;
+    let newNotes = JSON.parse(data);
+
+    console.log("string", newNotes);
+    return res.json(newNotes);
+  });
 });
 
 app.post("/api/notes", (req, res) => {
-  req.body.id = noteID ++;
+  req.body.id = noteID++;
   notes.push(req.body);
+  fs.writeFile("./db/db.json", JSON.stringify(notes, null, 4), "utf8", err => {
+    if (err) {
+      console.log(err);
+    }
+  });
+  console.log("notes", notes);
+
   res.json(true);
-  console.log(req.body);
 });
 
 app.listen(PORT, function() {
