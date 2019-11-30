@@ -144,5 +144,5 @@ $noteTitle.on("keydown", handleRenderSaveBtn);
 $noteText.on("keydown", handleRenderSaveBtn);
 
 // Gets and renders the initial list of notes
-getNotes();
+// getNotes();
 getAndRenderNotes();
