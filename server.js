@@ -3,11 +3,8 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const path = require("path");
 const fs = require("fs");
-let notes = [];
+let database = [];
 
-let noteID = 1;
-
-//sets up the express app to handle data parsing
 app.use(express.static("public"));
 app.use(express.static("assets"));
 app.use(express.static("css"));
@@ -26,17 +23,15 @@ app.get("/notes", function(req, res) {
 app.get("/api/notes", (req, res) => {
   fs.readFile("./db/db.json", (err, data) => {
     if (err) throw err;
-    notes = JSON.parse(data);
-    return res.json(notes);
+    database = JSON.parse(data);
+    return res.json(database[0].notes);
   });
 });
 
 app.post("/api/notes", (req, res) => {
-  console.log("notes", notes);
-
-  req.body.id = noteID++;
-  notes.push(req.body);
-  fs.writeFile("./db/db.json", JSON.stringify(notes, null, 4), "utf8", err => {
+  req.body.id = database[0].lastID++;
+  database[0].notes.push(req.body);
+  fs.writeFile("./db/db.json", JSON.stringify(database), "utf8", err => {
     if (err) {
       console.log(err);
     }
@@ -49,10 +44,11 @@ app.listen(PORT, function() {
   console.log("App listening on PORT " + PORT);
 });
 
-let getNotes = () => {
+let init = () => {
+  //check if dbjson exists, if not, read file template.json add db.json to git ignore
   fs.readFile("./db/db.json", (err, data) => {
     if (err) throw err;
-    notes = JSON.parse(data);
+    database = JSON.parse(data);
   });
 };
-getNotes();
+init();
