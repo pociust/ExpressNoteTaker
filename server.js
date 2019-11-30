@@ -40,6 +40,25 @@ app.post("/api/notes", (req, res) => {
   res.json(true);
 });
 
+app.delete("/api/notes/:id", (req, res) => {
+  database[0].notes.splice(
+    database[0].notes.findIndex(function(i) {
+      return i.id === req.params.id;
+    }),
+    1
+  );
+  fs.writeFile("./db/db.json", JSON.stringify(database), "utf8", err => {
+    if (err) {
+      console.log(err);
+    }
+  });
+
+  res.json(true);
+
+  // let deleteID = database[0].notes.find(({ id }) => id === req.params.id);
+  // console.log("deleteID", deleteID);
+});
+
 app.listen(PORT, function() {
   console.log("App listening on PORT " + PORT);
 });
