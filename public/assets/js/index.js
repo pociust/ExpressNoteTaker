@@ -3,7 +3,6 @@ const $noteText = $(".note-textarea");
 const $saveNoteBtn = $(".save-note");
 const $newNoteBtn = $(".new-note");
 const $noteList = $(".list-container .list-group");
-console.log("helloworld this is static indexjs");
 // activeNote is used to keep track of the note in the textarea
 let activeNote = {};
 let lastID = -1;
@@ -66,7 +65,6 @@ const handleNoteSave = () => {
 const handleNoteDelete = function(event) {
   // prevents the click listener for the list from being called when the button inside of it is clicked
   event.stopPropagation();
-  console.log("this", event);
 
   let note = $(this)
     .parent(".list-group-item")
@@ -108,13 +106,11 @@ const handleRenderSaveBtn = () => {
 // Render's the list of note titles
 const renderNoteList = notes => {
   $noteList.empty();
-  console.log("renderNoteList", notes);
 
   const noteListItems = [];
 
   for (var i = 0; i < notes.length; i++) {
     let note = notes[i];
-    console.log("notes", note[0]);
 
     let $li = $("<li class='list-group-item'>").data(note);
     let $span = $("<span>").text(note.title);
@@ -144,5 +140,4 @@ $noteTitle.on("keydown", handleRenderSaveBtn);
 $noteText.on("keydown", handleRenderSaveBtn);
 
 // Gets and renders the initial list of notes
-// getNotes();
 getAndRenderNotes();
