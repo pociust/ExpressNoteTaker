@@ -54,9 +54,6 @@ app.delete("/api/notes/:id", (req, res) => {
   });
 
   res.json(true);
-
-  // let deleteID = database[0].notes.find(({ id }) => id === req.params.id);
-  // console.log("deleteID", deleteID);
 });
 
 app.listen(PORT, function() {
@@ -64,10 +61,22 @@ app.listen(PORT, function() {
 });
 
 let init = () => {
-  //check if dbjson exists, if not, read file template.json add db.json to git ignore
-  fs.readFile("./db/db.json", (err, data) => {
-    if (err) throw err;
-    database = JSON.parse(data);
-  });
+  if (fs.existsSync("./db/db.json")) {
+    fs.readFile("./db/db.json", (err, data) => {
+      if (err) throw err;
+      database = JSON.parse(data);
+    });
+  } else {
+    fs.readFile("./db/template.json", (err, data) => {
+      if (err) throw err;
+      database = JSON.parse(data);
+      fs.writeFile("./db/db.json", JSON.stringify(database), "utf8", err => {
+        if (err) {
+          console.log(err);
+        }
+      });
+    });
+  }
 };
+
 init();
